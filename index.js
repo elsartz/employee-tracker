@@ -14,14 +14,22 @@ db.connect(err => {
     // console.log('Database connected.');
   });
 
-
-const sql = `SELECT title FROM roles`;
+const sql = `SELECT * from personnel left join roles on personnel.role_id=roles.id`;
+// const sql = `SELECT title FROM roles`;
 db.promise().query(sql)
 .then((rows) => {
     {
         let role = rows[0].map(({title}) => title);
-    //    console.log('role:',role, 'rows:',rows[0]);
-        addEmployee(role);
+        let first = rows[0].map(({first_name}) => first_name);
+        let last = rows[0].map(({last_name}) => last_name);
+
+        let firstLast =[];
+        for (var i = 0; i < rows[0].length; i++) {
+            firstLast.push(first[i] +' '+ last[i]);
+        }
+        // console.log(firstLast);
+       
+        addEmployee(role, firstLast);
     }
 })
 .catch(err => { console.log(err) })
