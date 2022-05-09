@@ -14,16 +14,18 @@ db.connect(err => {
     // console.log('Database connected.');
   });
 
+
 const sql = `SELECT title FROM roles`;
-db.query(sql, (err, rows) => {
-    let role = rows.map(({title}) => title);
-    console.log(role);
-    
-    if (err) throw err;
-    res.json({
-        data: rows
-    });
+db.promise().query(sql)
+.then((rows) => {
+    {
+        let role = rows[0].map(({title}) => title);
+    //    console.log('role:',role, 'rows:',rows[0]);
+        addEmployee(role);
+    }
 })
+.catch(err => { console.log(err) })
+.then( () => db.end());
 
 
 // select * from personnel left join roles on personnel.role_id=roles.id;
@@ -44,4 +46,4 @@ var exec = require('child_process').exec;
 
 
 
-addEmployee();
+// addEmployee(role);
