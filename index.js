@@ -1,7 +1,8 @@
 const mysql = require('mysql2');
 
 // Connect to database
-const db = mysql.createConnection(
+// const db = 
+mysql.createConnection(
     {
         host: 'localhost',
         // Your MySQL username,
@@ -13,16 +14,23 @@ const db = mysql.createConnection(
 console.log('Connected to the employee database.')
 );
 
+// db.connect(err => {
+//     if (err) throw err;
+//         console.log('Database connected.');
+//   });
 
-const com1 = "mysqlshow -u root -p employee personnel"
-const com2 = "mysqlshow -u root -p employee "
-const com3 = "mysqlshow -u root -p employee personnel first_name last_name"
+
+// select * from personnel left join roles on personnel.role_id=roles.id;
+
+const com1 = "mysqlshow -u root --password=MyNewPass employee personnel; exit;"
+const com2 = "mysqlshow -u root --password=MyNewPass employee "
+const com3 = `mysql -u root --password=MyNewPass -e "select * from personnel"`
 var exec = require('child_process').exec;
 
 exec(com1,
     function (error, stdout, stderr) {
         console.log('stdout: ' + stdout);
-        console.log('stderr: ' + stderr);
+        // console.log('stderr: ' + stderr);
         if (error !== null) {
              console.log('exec error: ' + error);
         }
