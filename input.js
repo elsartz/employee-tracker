@@ -1,19 +1,62 @@
 const inquirer = require('inquirer');
+const queryAddEmployee = require('./index');
+const db = require('./db/connection');
 
-const mainMenu = [];
+function mainMenu() {
+    inquirer.prompt([
+        {
+            type: 'list',
+            name: 'choice',
+            message: 'What would you like to do?',
+            choices: [  'View all employees',
+                        'Add Employee',
+                        'Update Employee role',
+                        'View all roles',
+                        'Add role',
+                        'View all departments',
+                        'Add department',
+                        'Quit']
+        }
+    ]).then( function (result) {
+               
+                    if (result === 'View all employees') {
+                        console.log('View all employees');
+                        mainMenu();
+                    } else if (result === 'Add Employee') {
+                        queryAddEmployee();
+                    } else if (result === 'Update Employee role') {
+                        console.log('Update Employee role');
+                        mainMenu();
+                    } else if (result === 'View all roles') {
+                        console.log('View all roles');
+                        mainMenu();
+                    } else if (result === 'Add role') {
+                        console.log('Add role');
+                        mainMenu();
+                    } else if (result === 'View all departments') {
+                        console.log('View all departments');
+                        mainMenu();
+                    } else if (result === 'Add department') {
+                        console.log('Add department');
+                        mainMenu();
+                    } else if (result === 'Quit') {
+                        return;
+                    }
+                
+                })     //.then( () => db.end());
+};
 
 
 function addEmployee(role, manager) {
-    // let roles = role;
+    // initiate the role choice
     let roleTitleArray = role.map($title => {
         return $title;
     });
-
+    // initial the manager choice
     let managerNameArray = manager.map($name => {
         return $name;
     })
-
-    // console.log(roleTitleArray);
+    // Questions to add an employee
     return inquirer.prompt([
         {
             type: 'input',
@@ -52,13 +95,13 @@ function addEmployee(role, manager) {
             name: 'managerName',
             message: "What is employee's manager?",
             choices: managerNameArray
-        }
-        
+        }        
     ]);
 }
 
 module.exports = {   
-                    addEmployee };
+                    addEmployee,
+                    mainMenu };
                     // viewEmployees,
                     // updateEmployee, 
                     // viewRole,
