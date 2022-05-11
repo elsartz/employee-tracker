@@ -3,7 +3,7 @@ const queryAddEmployee = require('./index');
 const db = require('./db/connection');
 
 function mainMenu() {
-    inquirer.prompt([
+    return inquirer.prompt([
         {
             type: 'list',
             name: 'choice',
@@ -17,33 +17,36 @@ function mainMenu() {
                         'Add department',
                         'Quit']
         }
-    ]).then( function (result) {
-               
+    ]).then((answer) => {
+debugger;
+              result = (Object.values(answer));
+              console.log(result);
                     if (result === 'View all employees') {
                         console.log('View all employees');
-                        mainMenu();
+                        return mainMenu();
                     } else if (result === 'Add Employee') {
                         queryAddEmployee();
+                        return mainMenu();
                     } else if (result === 'Update Employee role') {
                         console.log('Update Employee role');
-                        mainMenu();
+                        return mainMenu();
                     } else if (result === 'View all roles') {
                         console.log('View all roles');
-                        mainMenu();
+                        return mainMenu();
                     } else if (result === 'Add role') {
                         console.log('Add role');
-                        mainMenu();
+                        return mainMenu();
                     } else if (result === 'View all departments') {
                         console.log('View all departments');
-                        mainMenu();
+                        return mainMenu();
                     } else if (result === 'Add department') {
                         console.log('Add department');
-                        mainMenu();
+                        return mainMenu();;
                     } else if (result === 'Quit') {
                         return;
                     }
                 
-                })     //.then( () => db.end());
+                }).then( () => db.end());
 };
 
 
@@ -96,7 +99,22 @@ function addEmployee(role, manager) {
             message: "What is employee's manager?",
             choices: managerNameArray
         }        
-    ]);
+    ]).then(newEmploy => {
+             
+        let data = Object.values(newEmploy);
+        let fname = data[0];
+        let lname = data[1];
+        let manager_id = data[2];
+
+        const sqlIds = ``
+
+        role_id = 1; manager_id = 1;
+        const sql = `INSERT INTO personnel (first_name, last_name, role_id, manager_id) VALUES ('${fname}','${lname}',${role_id},${manager_id})`;
+        db.query(sql, function (err, rows) {
+            if (err) throw err;
+            console.log('Employee added');
+        })
+    }).then(() => db.end());
 }
 
 module.exports = {   

@@ -1,5 +1,5 @@
 
-const db = require('./db/connection');
+const db = require('./db/connection.js');
 const { // viewEmployees, 
         addEmployee,
         mainMenu } = require('./input.js');
@@ -12,7 +12,7 @@ const { // viewEmployees,
 
 db.connect(err => {
     if (err) throw err;
-    // console.log('Database connected.');
+    console.log('Database connected.');
   });
 
 function queryAddEmployee() { 
@@ -32,10 +32,13 @@ function queryAddEmployee() {
         }
     )
     .catch(err => { console.log(err) })
-    .then( () => db.end());
+    // .then( () => {
+    //     return console.log('Exit');
+    // } );// db.end());    // mainMenu());
 }
 
-mainMenu();
+// mainMenu();
+queryAddEmployee();
 
 module.exports = queryAddEmployee;
 
