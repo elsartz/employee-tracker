@@ -32,7 +32,7 @@ function queryAddEmployee() {
         }
     )
     .catch(err => { console.log(err) })
-    .then( () => mainMenu());//db.end());
+    .then( () => db.end());
 }
 
 mainMenu();
