@@ -49,6 +49,35 @@ debugger;
                 }).then( () => db.end());
 };
 
+function addDepartment() {
+
+    return inquirer.prompt([
+        {
+            type: 'input',
+            name: 'department',
+            message: "What is the name of the department?",
+            validate: nameInput => {
+                if (nameInput) {
+                    return true;                
+                } else {
+                    console.log('Please enter a valid name');
+                    return false;
+                }
+            }
+            
+        }
+    ]).then (newDepartment => {
+        // console.log(newDepartment);
+        let department = Object.values(newDepartment);
+        const sql = `INSERT INTO department (name) VALUES ('${department}')`;
+        db.query(sql, function (err, rows) {
+            if (err) throw err;
+            console.log('Department added');
+        })
+    }).then(() => db.end());
+
+    
+}
 
 function addEmployee(role, manager) {
     // initiate the role choice
@@ -119,10 +148,10 @@ function addEmployee(role, manager) {
 
 module.exports = {   
                     addEmployee,
+                    addDepartment,
                     mainMenu };
                     // viewEmployees,
                     // updateEmployee, 
                     // viewRole,
                     // addRole, 
                     // viewDepartment,
-                    // addDepartment };

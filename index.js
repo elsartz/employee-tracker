@@ -2,18 +2,25 @@
 const db = require('./db/connection.js');
 const { // viewEmployees, 
         addEmployee,
+        addDepartment,
         mainMenu } = require('./input.js');
         // updateEmployee, 
         // viewRole,
         // addRole, 
         // viewDepartment,
-        // addDepartment 
+        //  
 
 
 db.connect(err => {
     if (err) throw err;
     console.log('Database connected.');
   });
+
+function queryAddDepartment() {
+    const sql = ``;
+
+} 
+
 
 function queryAddEmployee() { 
     const sql = `SELECT * from personnel left join roles on personnel.role_id=roles.id`;
@@ -38,7 +45,8 @@ function queryAddEmployee() {
 }
 
 // mainMenu();
-queryAddEmployee();
+// queryAddEmployee();
+addDepartment();
 
 module.exports = queryAddEmployee;
 
