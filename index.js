@@ -2,6 +2,7 @@
 const db = require('./db/connection.js');
 const { // viewEmployees, 
         addEmployee,
+        addRole,
         addDepartment,
         mainMenu } = require('./input.js');
         // updateEmployee, 
@@ -21,10 +22,19 @@ function queryAddDepartment() {
 
 } 
 
+function queryAddRole() {
+    const sql = `SELECT name FROM department`;
+    db.promise().query(sql)
+    .then((rows) => { 
+        let department = rows[0].map(({name}) => name);
+        console.log(department);
+        addRole(department);
+    })
+}
 
 function queryAddEmployee() { 
     const sql = `SELECT * from personnel left join roles on personnel.role_id=roles.id`;
-    // const sql = `SELECT title FROM roles`;
+    
     db.promise().query(sql)
         .then((rows) => {    
             let role = rows[0].map(({title}) => title);
@@ -44,9 +54,11 @@ function queryAddEmployee() {
     // } );// db.end());    // mainMenu());
 }
 
-// mainMenu();
+mainMenu();
 // queryAddEmployee();
-addDepartment();
+// addDepartment();
+// queryAddRole();
+
 
 module.exports = queryAddEmployee;
 

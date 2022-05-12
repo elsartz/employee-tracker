@@ -18,21 +18,21 @@ function mainMenu() {
                         'Quit']
         }
     ]).then((answer) => {
-debugger;
-              result = (Object.values(answer));
-              console.log(result);
+// console.log(answer); return;
+              result = (Object.values(answer))[0];
+              console.log(' the console',result);
                     if (result === 'View all employees') {
                         console.log('View all employees');
-                        return mainMenu();
+                         mainMenu();
                     } else if (result === 'Add Employee') {
                         queryAddEmployee();
-                        return mainMenu();
+                         mainMenu();
                     } else if (result === 'Update Employee role') {
                         console.log('Update Employee role');
                         return mainMenu();
                     } else if (result === 'View all roles') {
                         console.log('View all roles');
-                        return mainMenu();
+                        mainMenu();
                     } else if (result === 'Add role') {
                         console.log('Add role');
                         return mainMenu();
@@ -43,10 +43,10 @@ debugger;
                         console.log('Add department');
                         return mainMenu();;
                     } else if (result === 'Quit') {
-                        return;
+                        return db.end();
                     }
                 
-                }).then( () => db.end());
+                }) // .then( () => db.end());
 };
 
 function addDepartment() {
@@ -77,6 +77,48 @@ function addDepartment() {
     }).then(() => db.end());
 
     
+}
+
+function addRole(department) {
+    let departmentArray = department.map($title => {
+        return $title;
+    });
+    return inquirer.prompt([
+        {
+            type: 'input',
+            name: 'role',
+            message: "What is the name of the role?",
+            validate: nameInput => {
+                if (nameInput) {
+                    return true;                
+                } else {
+                    console.log('Please enter a valid name');
+                    return false;
+                }
+            }
+            
+        },
+        {
+            type: 'input',
+            name: 'salary',
+            message: "What is the salary of that role?",           
+        },
+        {
+            type: 'list',
+            name: 'department',
+            message: "Which department belongs to?",
+            choices: departmentArray            
+        }
+    ]).then (newRole => {
+        console.log(newRole);
+        let role = Object.values(newRole);
+        const sql = `INSERT INTO roles (title, salary, dep_id) VALUES ('${role[0]}','${role[1]}','1')`;
+        db.query(sql, function (err, rows) {
+            if (err) throw err;
+            console.log('Role added');
+        })
+    }).then(() => db.end());
+
 }
 
 function addEmployee(role, manager) {
@@ -149,9 +191,10 @@ function addEmployee(role, manager) {
 module.exports = {   
                     addEmployee,
                     addDepartment,
+                    addRole,
                     mainMenu };
                     // viewEmployees,
                     // updateEmployee, 
                     // viewRole,
-                    // addRole, 
+                    //  
                     // viewDepartment,
