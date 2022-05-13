@@ -8,7 +8,6 @@ function viewEmployees () {
     const sql = `SELECT *, department.name AS department from personnel left join roles on personnel.role_id=roles.idr join department on roles.dep_id=department.idd`;
     db.promise().query(sql)
         .then((data) => {
-            // console.log('data:',data[0]);
 
             let columns = data[0].map(({
                 id, first_name, last_name, title, department, salary, manager_id
@@ -24,7 +23,7 @@ function viewEmployees () {
             // console.log(firstLast);
 
             const table = cTable.getTable(columns);
-            
+            // add some space after the printout
             console.log('\n',table)
                 for (let i=5; i<columns.length; i++) {
                     console.log('\n');
@@ -45,6 +44,7 @@ function viewRoles () {
                 idr, title, name, salary
             }))
             const table = cTable.getTable(columns);
+            // add some space after the printout
             console.log('\n',table)
                 for (let i=5; i<columns.length; i++) {
                     console.log('\n');
@@ -63,8 +63,9 @@ function viewDepartment () {
                 idd, name
             }))
             const table = cTable.getTable(columns);
+            // add some space after the printout
             console.log('\n',table)
-                for (let i=5; i<columns.length; i++) {
+                for (let i=0; i<columns.length; i++) {
                     console.log('\n');
                 };
         }).catch(err => { console.log(err) })
@@ -87,12 +88,11 @@ function mainMenu() {
                         'Quit']
         }
     ]).then((answer) => {
-// console.log(answer); return;
+
               result = (Object.values(answer))[0];
-            //   console.log(' the console',result);
+            
                     if (result === 'View all employees') {
                         viewEmployees();
-                        // console.log('View all employees');
                          mainMenu();
                     } else if (result === 'Add Employee') {
                         queryAddEmployee();
@@ -104,19 +104,19 @@ function mainMenu() {
                         viewRoles();
                         mainMenu();
                     } else if (result === 'Add role') {
-                        console.log('Add role');
+                        queryAddRole();
                          mainMenu();
                     } else if (result === 'View all departments') {
                         viewDepartment();
                          mainMenu();
                     } else if (result === 'Add department') {
-                        console.log('Add department');
+                        addDepartment();
                          mainMenu();
                     } else if (result === 'Quit') {
                         return db.end();
                     }
                 
-                }) // .then( () => db.end());
+        }) 
 };
 
 function addDepartment() {
@@ -144,9 +144,18 @@ function addDepartment() {
             if (err) throw err;
             console.log('Department added');
         })
-    }).then(() => db.end());
+    })   //.then(() => {return});
+        
+}
 
-    
+function queryAddRole() {
+    const sql = `SELECT name FROM department`;
+    db.promise().query(sql)
+    .then((rows) => { 
+        let department = rows[0].map(({name}) => name);
+        console.log(department);
+        addRole(department);
+    }).then(() => {return});
 }
 
 function addRole(department) {
@@ -187,8 +196,8 @@ function addRole(department) {
             if (err) throw err;
             console.log('Role added');
         })
-    }).then(() => db.end());
-
+    }).then(() => {return});
+    
 }
 
 function addEmployee(role, manager) {
@@ -258,13 +267,7 @@ function addEmployee(role, manager) {
     }).then(() => {return});
 }
 
-module.exports = {   
-                    addEmployee,
+module.exports = {  addEmployee,
                     addDepartment,
                     addRole,
                     mainMenu };
-                    // viewEmployees,
-                    // updateEmployee, 
-                    // viewRole,
-                    //  
-                    // viewDepartment,
