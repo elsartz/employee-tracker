@@ -1,7 +1,12 @@
 const inquirer = require('inquirer');
-const queryAddEmployee = require('./index');
 const db = require('./db/connection');
 const cTable = require('console.table');
+
+
+// db.connect(err => {
+//     if (err) throw err;
+//     console.log('Database connected.');
+// });
 
 function viewEmployees () {
     // return console.log('View all employees from console.table');
@@ -119,32 +124,31 @@ function mainMenu() {
         }) 
 };
 
-function addDepartment() {
+async function addDepartment() {
 
-    return inquirer.prompt([
+    const newDepartment = await inquirer.prompt([
         {
             type: 'input',
             name: 'department',
             message: "What is the name of the department?",
-            validate: nameInput => {
-                if (nameInput) {
-                    return true;                
+            validate: nameInput_1 => {
+                if (nameInput_1) {
+                    return true;
                 } else {
                     console.log('Please enter a valid name');
                     return false;
                 }
             }
-            
         }
-    ]).then (newDepartment => {
-        // console.log(newDepartment);
-        let department = Object.values(newDepartment);
-        const sql = `INSERT INTO department (name) VALUES ('${department}')`;
-        db.query(sql, function (err, rows) {
-            if (err) throw err;
-            console.log('Department added');
-        })
-    })   //.then(() => {return});
+    ]);
+    // console.log(newDepartment);
+    let department = Object.values(newDepartment);
+    const sql = `INSERT INTO department (name) VALUES ('${department}')`;
+    db.query(sql, function (err, rows) {
+        if (err)
+            throw err;
+        console.log('Department added');
+    });   //.then(() => {return});
         
 }
 
@@ -198,6 +202,29 @@ function addRole(department) {
         })
     }).then(() => {return});
     
+}
+
+function queryAddEmployee() { 
+    const sql = `SELECT * from personnel left join roles on personnel.role_id=roles.idr`;
+    // SELECT * from personnel left join roles on personnel.role_id=roles.idr join department on roles.dep_id=department.idd
+    db.promise().query(sql)
+        .then((rows) => {    
+            console.log('rows from addEmployee',rows[0]);
+            let role = rows[0].map(({title}) => title);
+            let first = rows[0].map(({first_name}) => first_name);
+            let last = rows[0].map(({last_name}) => last_name);
+
+            let firstLast =[];
+            for (var i = 0; i < rows[0].length; i++) {
+                firstLast.push(first[i] +' '+ last[i]);
+            }               
+            addEmployee(role, firstLast);    
+        }
+    )
+    .catch(err => { console.log(err) })
+    // .then( () => {
+    //     return console.log('Exit');
+    // } );// db.end());    // mainMenu());
 }
 
 function addEmployee(role, manager) {
@@ -267,7 +294,7 @@ function addEmployee(role, manager) {
     }).then(() => {return});
 }
 
-module.exports = {  addEmployee,
-                    addDepartment,
-                    addRole,
-                    mainMenu };
+mainMenu();
+// queryAddEmployee();
+// addDepartment();
+// queryAddRole();
