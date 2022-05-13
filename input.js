@@ -17,24 +17,58 @@ function viewEmployees () {
             })) 
             // console.log('columns', columns);
 
-    const table = cTable.getTable(columns);
-      
-    console.log('\n',table)
-        for (let i=5; i<columns.length; i++) {
-            console.log('\n');
-        };
-}).catch(err => { console.log(err) })
+            // let firstLast =[];
+            // for (var i = 0; i < columns[0].length; i++) {
+            //     firstLast.push(first_name[i] +' '+ last_name[i]);
+            // }  
+            // console.log(firstLast);
+
+            const table = cTable.getTable(columns);
+            
+            console.log('\n',table)
+                for (let i=5; i<columns.length; i++) {
+                    console.log('\n');
+                };
+        }).catch(err => { console.log(err) })
     
     return;
    
 }
 
 function viewRoles () {
-    return console.log('View all roles from console.table');
+    const sql = `select * from roles left join department on roles.dep_id=department.idd`;
+    db.promise().query(sql)
+        .then((data) => {
+            let columns = data[0].map(({
+                idr, title, name, salary
+            }) => ({
+                idr, title, name, salary
+            }))
+            const table = cTable.getTable(columns);
+            console.log('\n',table)
+                for (let i=5; i<columns.length; i++) {
+                    console.log('\n');
+                };
+        }).catch(err => { console.log(err) })
+    return;
 }
 
 function viewDepartment () {
-    return console.log('View all department from console.table');
+    const sql = `select * from department`;
+    db.promise().query(sql)
+        .then((data) => {
+            let columns = data[0].map(({
+                idd, name
+            }) => ({
+                idd, name
+            }))
+            const table = cTable.getTable(columns);
+            console.log('\n',table)
+                for (let i=5; i<columns.length; i++) {
+                    console.log('\n');
+                };
+        }).catch(err => { console.log(err) })
+    return;
 }
 
 function mainMenu() {
