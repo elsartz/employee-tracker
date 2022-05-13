@@ -8,21 +8,24 @@ function viewEmployees () {
     const sql = `SELECT *, department.name AS department from personnel left join roles on personnel.role_id=roles.idr join department on roles.dep_id=department.idd`;
     db.promise().query(sql)
         .then((data) => {
-            console.log('data:',data[0]);
+            // console.log('data:',data[0]);
 
             let columns = data[0].map(({
                 id, first_name, last_name, title, department, salary, manager_id
             }) => ({
                 id, first_name, last_name, title, department, salary, manager_id
             })) 
-            console.log('columns', columns);
+            // console.log('columns', columns);
 
     const table = cTable.getTable(columns);
       
-    console.log(table);
+    console.log('\n',table)
+        for (let i=5; i<columns.length; i++) {
+            console.log('\n');
+        };
 }).catch(err => { console.log(err) })
     
-    
+    return;
    
 }
 
@@ -218,7 +221,7 @@ function addEmployee(role, manager) {
             if (err) throw err;
             console.log('Employee added');
         })
-    }).then(() => db.end());
+    }).then(() => {return});
 }
 
 module.exports = {   
