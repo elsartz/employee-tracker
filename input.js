@@ -20,7 +20,7 @@ function mainMenu() {
     ]).then((answer) => {
 // console.log(answer); return;
               result = (Object.values(answer))[0];
-              console.log(' the console',result);
+            //   console.log(' the console',result);
                     if (result === 'View all employees') {
                         console.log('View all employees');
                          mainMenu();
@@ -29,19 +29,19 @@ function mainMenu() {
                          mainMenu();
                     } else if (result === 'Update Employee role') {
                         console.log('Update Employee role');
-                        return mainMenu();
+                         mainMenu();
                     } else if (result === 'View all roles') {
                         console.log('View all roles');
                         mainMenu();
                     } else if (result === 'Add role') {
                         console.log('Add role');
-                        return mainMenu();
+                         mainMenu();
                     } else if (result === 'View all departments') {
                         console.log('View all departments');
-                        return mainMenu();
+                         mainMenu();
                     } else if (result === 'Add department') {
                         console.log('Add department');
-                        return mainMenu();;
+                         mainMenu();
                     } else if (result === 'Quit') {
                         return db.end();
                     }
