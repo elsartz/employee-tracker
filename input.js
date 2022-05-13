@@ -1,6 +1,38 @@
 const inquirer = require('inquirer');
 const queryAddEmployee = require('./index');
 const db = require('./db/connection');
+const cTable = require('console.table');
+
+function viewEmployees () {
+    // return console.log('View all employees from console.table');
+    const sql = `SELECT *, department.name AS department from personnel left join roles on personnel.role_id=roles.idr join department on roles.dep_id=department.idd`;
+    db.promise().query(sql)
+        .then((data) => {
+            console.log('data:',data[0]);
+
+            let columns = data[0].map(({
+                id, first_name, last_name, title, department, salary, manager_id
+            }) => ({
+                id, first_name, last_name, title, department, salary, manager_id
+            })) 
+            console.log('columns', columns);
+
+    const table = cTable.getTable(columns);
+      
+    console.log(table);
+}).catch(err => { console.log(err) })
+    
+    
+   
+}
+
+function viewRoles () {
+    return console.log('View all roles from console.table');
+}
+
+function viewDepartment () {
+    return console.log('View all department from console.table');
+}
 
 function mainMenu() {
     return inquirer.prompt([
@@ -22,7 +54,8 @@ function mainMenu() {
               result = (Object.values(answer))[0];
             //   console.log(' the console',result);
                     if (result === 'View all employees') {
-                        console.log('View all employees');
+                        viewEmployees();
+                        // console.log('View all employees');
                          mainMenu();
                     } else if (result === 'Add Employee') {
                         queryAddEmployee();
@@ -31,13 +64,13 @@ function mainMenu() {
                         console.log('Update Employee role');
                          mainMenu();
                     } else if (result === 'View all roles') {
-                        console.log('View all roles');
+                        viewRoles();
                         mainMenu();
                     } else if (result === 'Add role') {
                         console.log('Add role');
                          mainMenu();
                     } else if (result === 'View all departments') {
-                        console.log('View all departments');
+                        viewDepartment();
                          mainMenu();
                     } else if (result === 'Add department') {
                         console.log('Add department');
