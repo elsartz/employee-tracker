@@ -103,7 +103,7 @@ function mainMenu() {
                         queryAddEmployee();
                          mainMenu();
                     } else if (result === 'Update Employee role') {
-                        console.log('Update Employee role');
+                        queryAlterEmployee();
                          mainMenu();
                     } else if (result === 'View all roles') {
                         viewRoles();
@@ -147,9 +147,9 @@ async function addDepartment() {
     db.query(sql, function (err, rows) {
         if (err)
             throw err;
-        console.log('Department added');
-    });   //.then(() => {return});
-        
+        console.log('Department No ', rows.insertId, ' added. ');
+    }) // .then(() => {return});
+    return;    
 }
 
 function queryAddRole() {
@@ -221,10 +221,8 @@ function queryAddEmployee() {
             addEmployee(role, firstLast);    
         }
     )
-    .catch(err => { console.log(err) })
-    // .then( () => {
-    //     return console.log('Exit');
-    // } );// db.end());    // mainMenu());
+    .catch(err => { console.log(err) });
+
 }
 
 function addEmployee(role, manager) {
@@ -294,7 +292,76 @@ function addEmployee(role, manager) {
     }).then(() => {return});
 }
 
-mainMenu();
-// queryAddEmployee();
+let id = [];
+function queryAlterEmployee () {
+   
+    let sql = `SELECT id, first_name, last_name FROM personnel`;
+    const query1 = db.promise().query(sql)
+        .then((rows) => {
+
+            let emplId = rows[0].map(({id}) => id);
+            let first = rows[0].map(({first_name}) => first_name);
+            let last = rows[0].map(({last_name}) => last_name);
+
+            let firstLast =[];
+            for (var i = 0; i < rows[0].length; i++) {
+                firstLast.push(first[i] +' '+ last[i]);
+            }  
+            // console.log('inside then of query1',firstLast);
+            for (var i = 0; i < emplId.length; i++) {
+                id.push(parseInt(emplId[i]));
+            }  
+            // console.log('id array',id);
+        
+            updateFirstQuery(id, firstLast);
+        
+        
+            const sql2 = `SELECT idr, title from roles`;
+            const query2 = db.promise().query(sql2)
+                .then((rows) => {
+            //  console.log('2nd rows', rows[0]);
+                    let idr = rows[0].map(({idr}) => idr);
+                    let title = rows[0].map(({title}) => title);
+
+                    // console.log('idr, title', idr, title);
+                })
+               
+        })
+    // return updateEmployee(idr, id);
+}
+
+function updateFirstQuery(employeeId, employeeName) {
+    let employee = employeeName.map($name => {return $name});
+    let id = employeeId.map($id => {return $id});
+   
+    let emplID = [];
+    for (var i = 0; i < employee.length; i++) {
+        emplID.push(id[i]+'-'+employee[i]);
+    }
+
+    return inquirer.prompt([
+        {
+            type: 'list',
+            name: 'name',
+            message: "Which employee's role do you want to update?",
+            choices: emplID
+        }
+    ]).then(data => {
+        record = Object.values(data);
+        console.log('record',record);
+        let newrec = record[0].split('-');
+        id = newrec[0];
+        console.log('id',id);
+    })
+}
+
+function updateEmployee(roleId, employeeId) {
+    return console.log('Employee updated');
+}
+
+// mainMenu();
+// addEmployee();
+queryAddEmployee();
 // addDepartment();
 // queryAddRole();
+// queryAlterEmployee();
