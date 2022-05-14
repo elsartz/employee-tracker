@@ -101,7 +101,8 @@ function mainMenu() {
                          mainMenu();
                     } else if (result === 'Add Employee') {
                         queryAddEmployee();
-                         mainMenu();
+                    
+                        //  mainMenu();
                     } else if (result === 'Update Employee role') {
                         queryAlterEmployee();
                          mainMenu();
@@ -289,7 +290,9 @@ function addEmployee(role, manager) {
             if (err) throw err;
             console.log('Employee added');
         })
-    }).then(() => {return});
+    }).then(() => {
+        return mainMenu();
+    });
 }
 
 let id = [];
@@ -359,9 +362,9 @@ function updateEmployee(roleId, employeeId) {
     return console.log('Employee updated');
 }
 
-// mainMenu();
+mainMenu();
 // addEmployee();
-queryAddEmployee();
+// queryAddEmployee();
 // addDepartment();
 // queryAddRole();
 // queryAlterEmployee();
