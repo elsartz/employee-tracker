@@ -30,9 +30,9 @@ function viewEmployees () {
             const table = cTable.getTable(columns);
             // add some space after the printout
             console.log('\n',table)
-                for (let i=5; i<columns.length; i++) {
-                    console.log('\n');
-                };
+                // for (let i=5; i<columns.length; i++) {
+                //     console.log('\n');
+                // };
         }).catch(err => { console.log(err) })
     
     return;
@@ -51,9 +51,9 @@ function viewRoles () {
             const table = cTable.getTable(columns);
             // add some space after the printout
             console.log('\n',table)
-                for (let i=5; i<columns.length; i++) {
-                    console.log('\n');
-                };
+                // for (let i=5; i<columns.length; i++) {
+                //     console.log('\n');
+                // };
         }).catch(err => { console.log(err) })
     return;
 }
@@ -70,9 +70,9 @@ function viewDepartment () {
             const table = cTable.getTable(columns);
             // add some space after the printout
             console.log('\n',table)
-                for (let i=0; i<columns.length; i++) {
-                    console.log('\n');
-                };
+                // for (let i=0; i<columns.length; i++) {
+                //     console.log('\n');
+                // };
         }).catch(err => { console.log(err) })
     return;
 }
@@ -101,8 +101,6 @@ function mainMenu() {
                          mainMenu();
                     } else if (result === 'Add Employee') {
                         queryAddEmployee();
-                    
-                        //  mainMenu();
                     } else if (result === 'Update Employee role') {
                         queryAlterEmployee();
                          mainMenu();
@@ -111,13 +109,13 @@ function mainMenu() {
                         mainMenu();
                     } else if (result === 'Add role') {
                         queryAddRole();
-                         mainMenu();
+                        //  mainMenu();
                     } else if (result === 'View all departments') {
                         viewDepartment();
                          mainMenu();
                     } else if (result === 'Add department') {
                         addDepartment();
-                         mainMenu();
+                      
                     } else if (result === 'Quit') {
                         return db.end();
                     }
@@ -125,32 +123,65 @@ function mainMenu() {
         }) 
 };
 
-async function addDepartment() {
+// async function addDepartment() {
 
-    const newDepartment = await inquirer.prompt([
-        {
-            type: 'input',
-            name: 'department',
-            message: "What is the name of the department?",
-            validate: nameInput_1 => {
-                if (nameInput_1) {
-                    return true;
-                } else {
-                    console.log('Please enter a valid name');
-                    return false;
-                }
-            }
-        }
-    ]);
-    // console.log(newDepartment);
-    let department = Object.values(newDepartment);
-    const sql = `INSERT INTO department (name) VALUES ('${department}')`;
-    db.query(sql, function (err, rows) {
-        if (err)
-            throw err;
-        console.log('Department No ', rows.insertId, ' added. ');
-    }) // .then(() => {return});
-    return;    
+//     const newDepartment = await inquirer.prompt([
+//         {
+//             type: 'input',
+//             name: 'department',
+//             message: "What is the name of the department?",
+//             validate: nameInput_1 => {
+//                 if (nameInput_1) {
+//                     return true;
+//                 } else {
+//                     console.log('Please enter a valid name');
+//                     return false;
+//                 }
+//             }
+//         }
+//     ]);
+//     // console.log(newDepartment);
+//     let department = Object.values(newDepartment);
+//     const sql = `INSERT INTO department (name) VALUES ('${department}')`;
+//     db.query(sql, function (err, rows) {
+//         if (err)
+//             throw err;
+//         console.log('Department No ', rows.insertId, ' added. ');
+//     }).then(() => {
+//         return mainMenu();
+//     });   
+// }
+
+function addDepartment() {
+
+    inquirer.prompt([
+       {
+           type: 'input',
+           name: 'department',
+           message: "What is the name of the department?",
+           validate: nameInput_1 => {
+               if (nameInput_1) {
+                   return true;
+               } else {
+                   console.log('Please enter a valid name');
+                   return false;
+               }
+           }
+       
+       }
+   ]).then((answer) => {
+       let department = Object.values(answer);
+       const sql = `INSERT INTO department (name) VALUES ('${department[0]}')`;
+       db.promise().query(sql)
+           .then((rows) => {
+               console.log('Department added');
+               mainMenu();
+           }).catch(err => { console.log(err) });
+   })
+           // console.log(newDepartment);
+   // let department = Object.values(newDepartment);
+   
+      
 }
 
 function queryAddRole() {
@@ -158,7 +189,7 @@ function queryAddRole() {
     db.promise().query(sql)
     .then((rows) => { 
         let department = rows[0].map(({name}) => name);
-        console.log(department);
+        // console.log(department);
         addRole(department);
     }).then(() => {return});
 }
@@ -194,14 +225,16 @@ function addRole(department) {
             choices: departmentArray            
         }
     ]).then (newRole => {
-        console.log(newRole);
+        // console.log(newRole);
         let role = Object.values(newRole);
         const sql = `INSERT INTO roles (title, salary, dep_id) VALUES ('${role[0]}','${role[1]}','1')`;
         db.query(sql, function (err, rows) {
             if (err) throw err;
             console.log('Role added');
         })
-    }).then(() => {return});
+    }).then(() => {
+        return mainMenu();
+    });
     
 }
 
