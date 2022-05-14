@@ -24,13 +24,6 @@ function viewEmployees () {
             }) => ({
                 id, first_name, last_name, title, department, salary, manager_id
             })) 
-            // console.log('columns', columns);
-
-            // let firstLast =[];
-            // for (var i = 0; i < columns[0].length; i++) {
-            //     firstLast.push(first_name[i] +' '+ last_name[i]);
-            // }  
-            // console.log(firstLast);
 
             const table = cTable.getTable(columns);
             // add some space after the printout
@@ -83,14 +76,7 @@ function viewDepartment () {
 }
 
 function mainMenu() {
-    // console.log(` 
-    //               -----------------------------------
-    //               |                                 |
-    //               |      Employee organizer         |
-    //               |                                 |
-    //               -----------------------------------
-    
-    // `);
+   
     return inquirer.prompt([
         {
             type: 'list',
@@ -131,8 +117,7 @@ function mainMenu() {
                       
                     } else if (result === 'Quit') {
                         return db.end();
-                    }
-                
+                    }                
         }) 
 };
 
@@ -162,10 +147,6 @@ function addDepartment() {
                mainMenu();
            }).catch(err => { console.log(err) });
    })
-           // console.log(newDepartment);
-   // let department = Object.values(newDepartment);
-   
-      
 }
 
 function queryAddRole() {
@@ -194,8 +175,7 @@ function addRole(department) {
                     console.log('Please enter a valid name');
                     return false;
                 }
-            }
-            
+            }            
         },
         {
             type: 'input',
@@ -227,7 +207,7 @@ function queryAddEmployee() {
     // SELECT * from personnel left join roles on personnel.role_id=roles.idr join department on roles.dep_id=department.idd
     db.promise().query(sql)
         .then((rows) => {    
-            // console.log('rows from addEmployee',rows[0]);
+            
             let role = rows[0].map(({title}) => title);
             let first = rows[0].map(({first_name}) => first_name);
             let last = rows[0].map(({last_name}) => last_name);
@@ -327,25 +307,20 @@ function queryAlterEmployee () {
             for (var i = 0; i < rows[0].length; i++) {
                 firstLast.push(first[i] +' '+ last[i]);
             }  
-            // console.log('inside then of query1',firstLast);
+            
             for (var i = 0; i < emplId.length; i++) {
                 id.push(parseInt(emplId[i]));
             }  
-            // console.log('id array',id);
         
             updateFirstQuery(id, firstLast);
-        
         
             const sql2 = `SELECT idr, title from roles`;
             const query2 = db.promise().query(sql2)
                 .then((rows) => {
-            //  console.log('2nd rows', rows[0]);
+           
                     let idr = rows[0].map(({idr}) => idr);
                     let title = rows[0].map(({title}) => title);
-
-                    // console.log('idr, title', idr, title);
-                })
-               
+                })               
         })
     // return updateEmployee(idr, id);
 }
