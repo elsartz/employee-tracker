@@ -2,12 +2,17 @@ const inquirer = require('inquirer');
 const db = require('./db/connection');
 const cTable = require('console.table');
 
-
-// db.connect(err => {
-//     if (err) throw err;
-//     console.log('Database connected.');
-// });
-
+function start() {
+    console.log(` 
+                  -----------------------------------
+                  |                                 |
+                  |      Employee organizer         |
+                  |                                 |
+                  -----------------------------------
+    
+    `);
+    mainMenu();
+}
 function viewEmployees () {
     // return console.log('View all employees from console.table');
     const sql = `SELECT *, department.name AS department from personnel left join roles on personnel.role_id=roles.idr join department on roles.dep_id=department.idd`;
@@ -78,14 +83,14 @@ function viewDepartment () {
 }
 
 function mainMenu() {
-    console.log(` 
-                  -----------------------------------
-                  |                                 |
-                  |      Employee organizer         |
-                  |                                 |
-                  -----------------------------------
+    // console.log(` 
+    //               -----------------------------------
+    //               |                                 |
+    //               |      Employee organizer         |
+    //               |                                 |
+    //               -----------------------------------
     
-    `);
+    // `);
     return inquirer.prompt([
         {
             type: 'list',
@@ -130,35 +135,6 @@ function mainMenu() {
                 
         }) 
 };
-
-// async function addDepartment() {
-
-//     const newDepartment = await inquirer.prompt([
-//         {
-//             type: 'input',
-//             name: 'department',
-//             message: "What is the name of the department?",
-//             validate: nameInput_1 => {
-//                 if (nameInput_1) {
-//                     return true;
-//                 } else {
-//                     console.log('Please enter a valid name');
-//                     return false;
-//                 }
-//             }
-//         }
-//     ]);
-//     // console.log(newDepartment);
-//     let department = Object.values(newDepartment);
-//     const sql = `INSERT INTO department (name) VALUES ('${department}')`;
-//     db.query(sql, function (err, rows) {
-//         if (err)
-//             throw err;
-//         console.log('Department No ', rows.insertId, ' added. ');
-//     }).then(() => {
-//         return mainMenu();
-//     });   
-// }
 
 function addDepartment() {
 
@@ -403,7 +379,8 @@ function updateEmployee(roleId, employeeId) {
     return console.log('Employee updated');
 }
 
-mainMenu();
+start();
+// mainMenu();
 // addEmployee();
 // queryAddEmployee();
 // addDepartment();
