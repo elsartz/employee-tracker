@@ -14,10 +14,14 @@
   - [Questions](#questions)
 
   # Installation
-    It is a command-line application that's why we are going to need: Node.js, Inquirer, and MySQL.
+    It is a command-line application that's why we are going to need: 
+   - Node.js to run the application and some modules from the npm library, 
+     - Inquirer for the inputs, 
+     - MySQL2 module to handle the database queries,
+     - console.table for the print-out. 
 
   # Usage
-    Usage
+    An application for viewing, managing and manipulating data for employees which can be easily converted for every company's size. 
 
   # Contributing
     Vardis Sartzetakis
@@ -26,7 +30,9 @@
   Follow the link for more info about the license [mit](https://choosealicense.com/licenses/mit)
 
   # Tests
-    Test
+  ![Main menu](https://github.com/elsartz/employee-tracker/blob/main/img/Screenshot_1.png)
+  ![Departments](https://github.com/elsartz/employee-tracker/blob/main/img/Screenshot_2.png)
+  ![Roles](https://github.com/elsartz/employee-tracker/blob/main/img/Screenshot_3.png)
 
   # Questions
   If you have any questions, please contact me at [email](mailto:elsartz@gmail.com).
